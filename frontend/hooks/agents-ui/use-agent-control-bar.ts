@@ -121,13 +121,23 @@ export function useInputControls({
     [cameraToggle, screenShareToggle, saveVideoInputEnabled]
   );
 
+  const session = useSessionContext();
+
   const handleToggleMicrophone = useCallback(
     async (enabled?: boolean) => {
-      await microphoneToggle.toggle(enabled);
-      // persist audio input enabled preference
-      saveAudioInputEnabled(!microphoneToggle.enabled);
+      if (!session.isConnected || !session.room || session.room.state !== 'connected') {
+        console.warn('Microphone toggle ignored: engine is not connected.');
+        return;
+      }
+      try {
+        await microphoneToggle.toggle(enabled);
+        // persist audio input enabled preference
+        saveAudioInputEnabled(!microphoneToggle.enabled);
+      } catch (err) {
+        console.error('Failed to toggle microphone:', err);
+      }
     },
-    [microphoneToggle, saveAudioInputEnabled]
+    [session.isConnected, session.room, microphoneToggle, saveAudioInputEnabled]
   );
 
   const handleToggleScreenShare = useCallback(
