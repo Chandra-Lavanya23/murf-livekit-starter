@@ -48,6 +48,8 @@ export interface AgentDisconnectButtonProps
  * <AgentDisconnectButton onClick={() => console.log('Disconnecting...')} />
  * ```
  */
+import { useLanguage } from '@/components/app/language-context';
+
 export function AgentDisconnectButton({
   icon,
   size = 'default',
@@ -57,6 +59,8 @@ export function AgentDisconnectButton({
   ...props
 }: AgentDisconnectButtonProps) {
   const { end } = useSessionContext();
+  const { t } = useLanguage();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
     if (typeof end === 'function') {
@@ -67,7 +71,11 @@ export function AgentDisconnectButton({
   return (
     <Button size={size} variant={variant} onClick={handleClick} {...props}>
       {icon ?? <PhoneOffIcon />}
-      {children ?? <span className={cn(size?.includes('icon') && 'sr-only')}>END CALL</span>}
+      {children ?? (
+        <span className={cn(size?.includes('icon') && 'sr-only', 'font-bold uppercase text-xs tracking-wider')}>
+          {t.endCall}
+        </span>
+      )}
     </Button>
   );
 }
