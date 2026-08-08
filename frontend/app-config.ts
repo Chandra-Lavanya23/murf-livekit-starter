@@ -33,9 +33,10 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG_DEFAULTS: AppConfig = {
-  companyName: 'Murf AI',
-  pageTitle: 'Voice Agent Starter',
-  pageDescription: 'A voice agent powered by Murf Falcon — the fastest TTS API',
+  companyName: 'Financial Services Assistant',
+  pageTitle: 'Financial Services Assistant',
+  pageDescription:
+    'Your voice assistant for smarter and safer financial decisions.',
 
   supportsChatInput: true,
   supportsVideoInput: true,
@@ -43,26 +44,18 @@ export const APP_CONFIG_DEFAULTS: AppConfig = {
   isPreConnectBufferEnabled: true,
 
   logo: '/murf-logo.svg',
-  accent: '#6366F1',
+  accent: '#0f766e', // Professional trustworthy banking teal/emerald
   logoDark: '/murf-logo-dark.svg',
-  accentDark: '#818cf8',
-  startButtonText: 'Start talking',
+  accentDark: '#14b8a6',
+  startButtonText: 'Start Conversation',
 
-  // optional: audio visualization configuration
-  // audioVisualizerType: 'bar',
-  // audioVisualizerColor: '#002cf2',
-  // audioVisualizerColorDark: '#1fd5f9',
-  // audioVisualizerColorShift: 0.3,
-  // audioVisualizerBarCount: 5,
-  // audioVisualizerType: 'radial',
-  // audioVisualizerRadialBarCount: 24,
-  // audioVisualizerRadialRadius: 100,
-  // audioVisualizerType: 'grid',
-  // audioVisualizerGridRowCount: 25,
-  // audioVisualizerGridColumnCount: 25,
-  // audioVisualizerType: 'wave',
-  // audioVisualizerWaveLineWidth: 3,
-  // audioVisualizerType: 'aura',
+  // Audio visualization configuration
+  audioVisualizerType: 'wave',
+  audioVisualizerColor: '#0f766e',
+  audioVisualizerColorDark: '#2dd4bf',
+  audioVisualizerColorShift: 0.2,
+  audioVisualizerWaveLineWidth: 3,
+  audioVisualizerBarCount: 7,
 
   // agent dispatch configuration
   agentName: process.env.AGENT_NAME ?? undefined,
