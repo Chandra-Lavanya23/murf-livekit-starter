@@ -11,6 +11,8 @@ import {
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import { cn } from '@/lib/shadcn/utils';
 import { TileLayout } from './tile-view';
+import { SpeakerStatusBar } from '@/components/app/speaker-status-bar';
+import { LanguageSelector } from '@/components/app/language-selector';
 
 const MotionMessage = motion.create(Shimmer);
 
@@ -190,6 +192,12 @@ export function AgentSessionView_01({
   };
 
   useEffect(() => {
+    if (messages.length > 0) {
+      setChatOpen(true);
+    }
+  }, [messages.length]);
+
+  useEffect(() => {
     const lastMessage = messages.at(-1);
     const lastMessageIsLocal = lastMessage?.from?.isLocal === true;
 
@@ -205,6 +213,18 @@ export function AgentSessionView_01({
       {...props}
     >
       <Fade top className="absolute inset-x-4 top-0 z-10 h-40" />
+      
+      {/* Top Active Speaker, State Indicator & Language Selector */}
+      <div className="absolute inset-x-4 top-3 z-40 flex flex-col items-center gap-2 md:top-5">
+        <div className="flex w-full max-w-xl items-center justify-between gap-2 px-1">
+          <span className="text-[11px] font-bold tracking-wider uppercase text-muted-foreground">
+            Financial Services Assistant
+          </span>
+          <LanguageSelector variant="header" />
+        </div>
+        <SpeakerStatusBar />
+      </div>
+
       {/* transcript */}
 
       <div className="absolute top-0 bottom-[135px] flex w-full flex-col md:bottom-[170px]">
