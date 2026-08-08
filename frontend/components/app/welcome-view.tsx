@@ -1,25 +1,23 @@
-import { Button } from '@/components/ui/button';
+'use client';
 
-function WelcomeImage() {
-  return (
-    <svg
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="text-fg0 mb-4 size-16"
-    >
-      <path
-        d="M15 24V40C15 40.7957 14.6839 41.5587 14.1213 42.1213C13.5587 42.6839 12.7956 43 12 43C11.2044 43 10.4413 42.6839 9.87868 42.1213C9.31607 41.5587 9 40.7957 9 40V24C9 23.2044 9.31607 22.4413 9.87868 21.8787C10.4413 21.3161 11.2044 21 12 21C12.7956 21 13.5587 21.3161 14.1213 21.8787C14.6839 22.4413 15 23.2044 15 24ZM22 5C21.2044 5 20.4413 5.31607 19.8787 5.87868C19.3161 6.44129 19 7.20435 19 8V56C19 56.7957 19.3161 57.5587 19.8787 58.1213C20.4413 58.6839 21.2044 59 22 59C22.7956 59 23.5587 58.6839 24.1213 58.1213C24.6839 57.5587 25 56.7957 25 56V8C25 7.20435 24.6839 6.44129 24.1213 5.87868C23.5587 5.31607 22.7956 5 22 5ZM32 13C31.2044 13 30.4413 13.3161 29.8787 13.8787C29.3161 14.4413 29 15.2044 29 16V48C29 48.7957 29.3161 49.5587 29.8787 50.1213C30.4413 50.6839 31.2044 51 32 51C32.7956 51 33.5587 50.6839 34.1213 50.1213C34.6839 49.5587 35 48.7957 35 48V16C35 15.2044 34.6839 14.4413 34.1213 13.8787C33.5587 13.3161 32.7956 13 32 13ZM42 21C41.2043 21 40.4413 21.3161 39.8787 21.8787C39.3161 22.4413 39 23.2044 39 24V40C39 40.7957 39.3161 41.5587 39.8787 42.1213C40.4413 42.6839 41.2043 43 42 43C42.7957 43 43.5587 42.6839 44.1213 42.1213C44.6839 41.5587 45 40.7957 45 40V24C45 23.2044 44.6839 22.4413 44.1213 21.8787C43.5587 21.3161 42.7957 21 42 21ZM52 17C51.2043 17 50.4413 17.3161 49.8787 17.8787C49.3161 18.4413 49 19.2044 49 20V44C49 44.7957 49.3161 45.5587 49.8787 46.1213C50.4413 46.6839 51.2043 47 52 47C52.7957 47 53.5587 46.6839 54.1213 46.1213C54.6839 45.5587 55 44.7957 55 44V20C55 19.2044 54.6839 18.4413 54.1213 17.8787C53.5587 17.3161 52.7957 17 52 17Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+import React from 'react';
+import {
+  Landmark,
+  ShieldAlert,
+  CreditCard,
+  Building2,
+  PhoneCall,
+  Lock,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/components/app/language-context';
+import { LanguageSelector } from '@/components/app/language-selector';
 
 interface WelcomeViewProps {
-  startButtonText: string;
+  startButtonText?: string;
   onStartCall: () => void;
 }
 
@@ -28,38 +26,148 @@ export const WelcomeView = ({
   onStartCall,
   ref,
 }: React.ComponentProps<'div'> & WelcomeViewProps) => {
-  return (
-    <div ref={ref}>
-      <section className="bg-background flex flex-col items-center justify-center text-center">
-        <WelcomeImage />
+  const { t, currentLanguageOption } = useLanguage();
 
-        <p className="text-foreground max-w-prose pt-1 leading-6 font-medium">
-          Chat live with your voice AI agent
+  const featureCards = [
+    {
+      title: t.govSchemes,
+      description: t.govSchemesDesc,
+      icon: Building2,
+      tag: 'Welfare & Benefits',
+    },
+    {
+      title: t.bankingBasics,
+      description: t.bankingBasicsDesc,
+      icon: Landmark,
+      tag: 'Accounts & Savings',
+    },
+    {
+      title: t.upiSafety,
+      description: t.upiSafetyDesc,
+      icon: CreditCard,
+      tag: 'Digital Payments',
+    },
+    {
+      title: t.fraudAwareness,
+      description: t.fraudAwarenessDesc,
+      icon: ShieldAlert,
+      tag: 'Cyber Protection',
+    },
+  ];
+
+  return (
+    <div
+      ref={ref}
+      className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-10 md:py-16"
+    >
+      {/* Background Soft Glow */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+        <div className="h-[400px] w-[600px] rounded-full bg-teal-500/10 blur-3xl dark:bg-teal-500/15" />
+      </div>
+
+      <section className="relative z-10 flex w-full max-w-4xl flex-col items-center text-center">
+        {/* Top Bar: Ready State Badge & Language Selector */}
+        <div className="relative z-30 mb-4 flex flex-wrap items-center justify-center gap-2.5 pointer-events-auto">
+          <div className="inline-flex items-center gap-2 rounded-full border border-teal-600/30 bg-teal-500/10 px-4 py-1.5 text-xs font-semibold text-teal-800 dark:text-teal-300">
+            <span className="relative flex size-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
+              <span className="relative inline-flex size-2.5 rounded-full bg-teal-600 dark:bg-teal-400" />
+            </span>
+            <span>{t.readyToHelp}</span>
+            <span className="text-teal-600/40">•</span>
+            <span className="text-[11px] font-normal opacity-90">Auto Voice Detection</span>
+          </div>
+
+          <LanguageSelector variant="header" />
+        </div>
+
+        {/* Banking Icon Emblem */}
+        <div className="relative mb-5 flex size-20 items-center justify-center rounded-3xl bg-linear-to-br from-teal-700 to-slate-900 text-white shadow-xl shadow-teal-900/20">
+          <Landmark className="size-10 text-teal-200" />
+          <div className="absolute -bottom-1 -right-1 flex size-7 items-center justify-center rounded-full bg-amber-500 text-white shadow-md">
+            <ShieldCheck className="size-4" />
+          </div>
+        </div>
+
+        {/* Title */}
+        <h1 className="text-foreground text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+          {t.appTitle}
+        </h1>
+
+        {/* Subtitle */}
+        <p className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">
+          {t.appSubtitle}
         </p>
 
-        <Button
-          size="lg"
-          onClick={onStartCall}
-          className="mt-6 w-64 rounded-full font-mono text-xs font-bold tracking-wider uppercase"
-        >
-          {startButtonText}
-        </Button>
+        {/* Indian User Greeting */}
+        <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-border/80 bg-card/70 px-4 py-2 text-sm font-semibold text-foreground backdrop-blur-xs shadow-xs">
+          <span>🙏</span>
+          <span className="text-teal-700 dark:text-teal-300">{t.greeting}</span>
+        </div>
+
+        {/* Feature Cards Grid (4 Core Areas) */}
+        <div className="mt-7 grid w-full grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+          {featureCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={card.title}
+                className="group bg-card/80 border-border/80 hover:border-teal-500/50 hover:bg-card flex flex-col justify-between rounded-2xl border p-4 text-left shadow-xs transition-all hover:shadow-md backdrop-blur-xs"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex size-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-700 dark:bg-teal-400/15 dark:text-teal-300">
+                      <Icon className="size-5" />
+                    </div>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      {card.tag}
+                    </span>
+                  </div>
+                  <h2 className="text-foreground mt-3 text-sm font-bold tracking-tight">
+                    {card.title}
+                  </h2>
+                  <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed">
+                    {card.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Large, Easy-to-Tap Start Button (State 1: Ready) */}
+        <div className="mt-9 flex w-full flex-col items-center">
+          <Button
+            size="lg"
+            onClick={onStartCall}
+            className="group bg-teal-700 hover:bg-teal-800 text-white h-14 w-full max-w-sm rounded-2xl text-base font-bold shadow-xl shadow-teal-800/25 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            <PhoneCall className="mr-2.5 size-5 transition-transform group-hover:rotate-12" />
+            {t.startConversation}
+            <ArrowRight className="ml-2.5 size-4 opacity-70 transition-transform group-hover:translate-x-1" />
+          </Button>
+
+          <p className="text-muted-foreground mt-3.5 flex items-center gap-1.5 text-xs">
+            <Lock className="size-3.5 text-teal-600 dark:text-teal-400" />
+            <span>
+              Spoken guidance in {currentLanguageOption.name} ({currentLanguageOption.nativeName}) & auto detection.
+            </span>
+          </p>
+        </div>
       </section>
 
-      <div className="fixed bottom-5 left-0 flex w-full items-center justify-center">
-        <p className="text-muted-foreground max-w-prose pt-1 text-xs leading-5 font-normal text-pretty md:text-sm">
-          Need help getting set up? Check out the{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docs.livekit.io/agents/start/voice-ai/"
-            className="underline"
-          >
-            Voice AI quickstart
-          </a>
-          .
-        </p>
-      </div>
+      {/* Trust & Verification Footer */}
+      <footer className="mt-12 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <CheckCircle2 className="size-3.5 text-teal-600 dark:text-teal-400" />
+          Indian Financial & Welfare Schemes
+        </span>
+        <span>•</span>
+        <span className="flex items-center gap-1.5">
+          <ShieldCheck className="size-3.5 text-teal-600 dark:text-teal-400" />
+          Safe Banking & UPI Anti-Fraud
+        </span>
+      </footer>
     </div>
   );
 };
