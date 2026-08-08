@@ -43,6 +43,8 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
+import { LanguageProvider } from '@/components/app/language-context';
+
 export default async function RootLayout({ children }: RootLayoutProps) {
   const hdrs = await headers();
   const appConfig = await getAppConfig(hdrs);
@@ -71,39 +73,32 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <header className="fixed top-0 left-0 z-50 hidden w-full flex-row justify-between p-6 md:flex">
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://livekit.io"
-              className="scale-100 transition-transform duration-300 hover:scale-110"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt={`${companyName} Logo`} className="block size-6 dark:hidden" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={logoDark ?? logo}
-                alt={`${companyName} Logo`}
-                className="hidden size-6 dark:block"
-              />
-            </a>
-            <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase">
-              Built with{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://docs.livekit.io/agents"
-                className="underline underline-offset-4"
-              >
-                LiveKit Agents
-              </a>
-            </span>
-          </header>
+          <LanguageProvider>
+            <header className="fixed top-0 left-0 z-40 hidden w-full flex-row items-center justify-between p-6 pointer-events-none md:flex">
+              <div className="flex items-center gap-3 pointer-events-auto">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-teal-700 text-white font-bold text-sm shadow-md">
+                  ₹
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-foreground text-sm font-bold tracking-tight">
+                    Financial Services Assistant
+                  </span>
+                  <span className="text-muted-foreground text-[10px] uppercase tracking-wider font-semibold">
+                    Smarter & Safer Financial Decisions
+                  </span>
+                </div>
+              </div>
+              <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/60 px-3.5 py-1 backdrop-blur-xs pointer-events-auto">
+                <span className="size-2 rounded-full bg-teal-500 animate-pulse" />
+                LiveKit & Murf Voice
+              </span>
+            </header>
 
-          {children}
-          <div className="group fixed bottom-0 left-1/2 z-50 mb-2 -translate-x-1/2">
-            <ThemeToggle className="translate-y-20 transition-transform delay-150 duration-300 group-hover:translate-y-0" />
-          </div>
+            {children}
+            <div className="group fixed bottom-0 left-1/2 z-50 mb-2 -translate-x-1/2">
+              <ThemeToggle className="translate-y-20 transition-transform delay-150 duration-300 group-hover:translate-y-0" />
+            </div>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
