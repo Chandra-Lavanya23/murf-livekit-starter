@@ -140,6 +140,8 @@ export function AgentTrackToggle({
     onPressedChange?.(nextPressed);
   };
 
+  const isMic = source === 'microphone';
+
   return (
     <Toggle
       size={size}
@@ -153,11 +155,17 @@ export function AgentTrackToggle({
           size,
           variant: variant ?? 'default',
           className,
-        })
+        }),
+        isMic && 'w-auto min-w-20 px-2.5 gap-1.5'
       )}
       {...props}
     >
-      <IconComponent className={cn(pending && 'animate-spin')} />
+      <IconComponent className={cn('size-4 shrink-0', pending && 'animate-spin')} />
+      {isMic && (
+        <span className="text-xs font-bold whitespace-nowrap">
+          {resolvedPressed ? 'Mic ON' : 'Mic OFF'}
+        </span>
+      )}
       {props.children}
     </Toggle>
   );
