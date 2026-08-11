@@ -64,6 +64,42 @@ uv run python src/agent.py console
 uv run python src/agent.py start
 ```
 
+## Financial Services Track: Multi-Scheme Eligibility & Document Verification
+
+DhanaMitra provides financial inclusion assistance with verified domain-specific function calling across multiple central government schemes.
+
+### 1. Data Source & Dataset Specifications
+- **Tool Name**: `check_scheme_eligibility` & `get_scheme_document_checklist`
+- **Dataset Type**: **Local Verified Dataset** (`backend/src/schemes.py`) compiled from official Government of India ministry gazettes and portal guidelines.
+- **Data Source**: 
+  - Department of Financial Services (DFS), Ministry of Finance
+  - Ministry of Housing and Urban Affairs (MoHUA)
+  - Ministry of Agriculture & Farmers Welfare
+  - Pension Fund Regulatory and Development Authority (PFRDA)
+- **Data Update / Effective Date**: **August 2024 Official Guidelines**
+
+### 2. Supported Government Schemes
+| Scheme Name | Short / Alias | Category | Target / Eligibility Criteria | Key Benefits |
+| :--- | :--- | :--- | :--- | :--- |
+| **Pradhan Mantri Jan Dhan Yojana (PMJDY)** | `pmjdy`, `jan dhan` | Banking & Financial Inclusion | Indian citizens aged 10+ without a basic savings account | Zero-balance account, RuPay card with ₹2L accidental insurance, ₹10k overdraft facility |
+| **Pradhan Mantri Suraksha Bima Yojana (PMSBY)** | `pmsby`, `suraksha bima` | Accident Insurance | Savings bank account holders aged 18 to 70 years | ₹20/year auto-debit; ₹2 Lakh accidental death/disability cover |
+| **Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)** | `pmjjby`, `jeevan jyoti` | Life Insurance | Savings bank account holders aged 18 to 50 years (cover up to 55) | ₹436/year auto-debit; ₹2 Lakh life cover for death due to any reason |
+| **Atal Pension Yojana (APY)** | `apy`, `atal pension` | Pension & Retirement | Unorganized workers aged 18 to 40 years (Non-income taxpayers only) | ₹1,000 to ₹5,000 guaranteed monthly pension starting at age 60 for life |
+| **Sukanya Samriddhi Yojana (SSY)** | `ssy`, `sukanya` | Girl Child Welfare | Parents/guardians of girl children aged 0 to 10 years (max 2 per family) | 8.2% p.a. sovereign guaranteed tax-free compounding returns (Sec 80C) |
+| **PM SVANidhi** | `svanidhi`, `street vendor loan` | Micro-Credit | Urban street vendors and hawkers with CoV / TVC / ULB ID | Collateral-free working capital loan (₹10k -> ₹20k -> ₹50k) with 7% interest subsidy |
+| **PM Mudra Yojana (PMMY)** | `pmmy`, `mudra` | MSME Business Loan | Non-farm micro & small enterprises | Collateral-free loans: Shishu (up to ₹50k), Kishore (₹50k-₹5L), Tarun (₹5L-₹10L/₹20L) |
+| **PM Kisan Samman Nidhi (PM-KISAN)** | `pmkisan`, `pm kisan` | Agriculture Support | Landholding farmer families with cultivable land | ₹6,000/year direct cash transfer in 3 equal tranches of ₹2,000 |
+
+### 3. Tool Architecture & Governance Rules
+1. **Dynamic Multi-Scheme Workflow**: The agent dynamically handles inquiries across all supported schemes rather than being hardcoded to a single scheme.
+2. **Missing Information Collection**: When a scheme is requested, the assistant determines the required parameters (age, occupation, taxpayer status, gender) and asks only for missing inputs before triggering the tool.
+3. **No Prompt-Based Eligibility Guessing**: The LLM never determines eligibility via prompt intuition; the final evaluation comes strictly from `check_scheme_eligibility`.
+4. **Mandatory Non-Guarantee Phrasing**:
+   > *"Based on the information provided, you appear to meet the basic eligibility criteria. Final eligibility is subject to the applicable scheme rules and the relevant authority."*
+5. **Loud Graceful Failures & Unavailable Schemes**:
+   - Unavailable schemes return: *"Information for the scheme '[scheme_name]' is currently unavailable in the verified database. I cannot evaluate eligibility for schemes not listed in my official dataset."*
+   - Runtime/data failure returns: *"I'm unable to retrieve the scheme information right now. Please try again later. I don't want to give you incorrect information."*
+
 ## Configuration
 
 All configuration lives in [`src/agent.py`](src/agent.py).
